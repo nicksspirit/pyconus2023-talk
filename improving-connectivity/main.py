@@ -1,9 +1,9 @@
 from io import StringIO
-import pandas as pd
-import networkx as nx
-import numpy as np
 
 import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
 
 freight_activity = """
 pickup,delivery,cost
@@ -29,7 +29,12 @@ graph: nx.DiGraph = nx.from_pandas_edgelist(
     create_using=nx.DiGraph,
 )
 
-nx.draw(graph, with_labels=True)
+# Layout/Position the nodes and edges using 
+# Fruchterman-Reingold force-directed algorithm.
+graph_layout = nx.spring_layout(graph)
+
+plt.title("Carrier Graph")
+nx.draw(graph, with_labels=True, pos=graph_layout)
 plt.show()
 
 print("Identified Leaf nodes")
@@ -63,7 +68,10 @@ print("\nRemove edges pointing to leaf node.")
 graph.remove_edges_from([("A", "D"), ("E", "F")])
 graph.remove_nodes_from(["D", "F"])
 
-nx.draw(graph, with_labels=True)
+graph_layout = nx.spring_layout(graph)
+
+plt.title("Carrier Graph w/ Leaf Nodes removed")
+nx.draw(graph, with_labels=True, pos=graph_layout)
 plt.show()
 
 print(f"Beta Index: {calc_beta_index(graph)}")
